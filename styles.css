@@ -313,6 +313,10 @@ h1 {
   background: #fff;
 }
 
+#previewImage[hidden] {
+  display: none;
+}
+
 .preview-placeholder {
   padding: 32px;
   color: var(--muted);
