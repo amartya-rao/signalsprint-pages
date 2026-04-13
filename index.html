@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signal Sprint</title>
+    <meta
+      name="description"
+      content="Signal Sprint DMC intimation site for analyzing dustbin scenes with upload or camera input."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Signal Sprint • IITK DMC Monitor</p>
+          <h1>DMC scene review without the Streamlit overhead.</h1>
+          <p class="hero-text">
+            Upload an image or capture one live, then send it to the hosted inference API for the
+            final binary DMC action decision.
+          </p>
+          <div class="hero-points">
+            <div class="hero-point">
+              <span class="hero-point-label">Detects</span>
+              <strong>dustbin spillover risk</strong>
+            </div>
+            <div class="hero-point">
+              <span class="hero-point-label">Returns</span>
+              <strong>probability + binary action</strong>
+            </div>
+            <div class="hero-point">
+              <span class="hero-point-label">Reads</span>
+              <strong>device or EXIF location</strong>
+            </div>
+          </div>
+        </div>
+        <aside class="hero-status">
+          <div class="status-card">
+            <span class="status-label">API target</span>
+            <strong id="apiBaseLabel">https://api.signalsprint.tech</strong>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Health</span>
+            <strong id="apiHealth">Checking…</strong>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Browser location</span>
+            <strong id="browserLocationStatus">Requesting…</strong>
+          </div>
+        </aside>
+      </header>
+
+      <main class="workspace">
+        <section class="panel input-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Input</p>
+              <h2>Choose a source</h2>
+            </div>
+            <div class="tab-row" role="tablist" aria-label="Input source">
+              <button class="tab is-active" id="uploadTab" data-tab="upload" type="button">
+                Upload image
+              </button>
+              <button class="tab" id="cameraTab" data-tab="camera" type="button">
+                Camera
+              </button>
+            </div>
+          </div>
+
+          <div class="tab-panel is-active" id="uploadPanel">
+            <label class="dropzone" for="uploadInput">
+              <input id="uploadInput" type="file" accept="image/*" />
+              <span class="dropzone-title">Choose an image from storage</span>
+              <span class="dropzone-text">JPEG, PNG, or WebP. EXIF GPS will be read when present.</span>
+            </label>
+          </div>
+
+          <div class="tab-panel" id="cameraPanel">
+            <div class="camera-shell">
+              <video id="cameraPreview" playsinline autoplay muted></video>
+              <canvas id="captureCanvas" hidden></canvas>
+              <div class="camera-actions">
+                <button class="button button-secondary" id="restartCameraButton" type="button">
+                  Restart camera
+                </button>
+                <button class="button" id="captureButton" type="button">Capture frame</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selected-image" id="selectedImageState">
+            <div>
+              <span class="selected-label">Current image</span>
+              <strong id="selectedImageName">No image selected</strong>
+            </div>
+            <button class="ghost-button" id="clearSelectionButton" type="button">Clear</button>
+          </div>
+
+          <div class="preview-shell">
+            <img id="previewImage" alt="Selected scene preview" hidden />
+            <div class="preview-placeholder" id="previewPlaceholder">Image preview will appear here.</div>
+          </div>
+
+          <div class="action-bar">
+            <button class="button" id="analyzeButton" type="button">Analyze scene</button>
+            <span class="inline-status" id="submissionStatus">Select an image to begin.</span>
+          </div>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Result</p>
+              <h2>Decision summary</h2>
+            </div>
+          </div>
+
+          <div class="decision-banner" id="decisionBanner">
+            <span class="decision-kicker">Awaiting analysis</span>
+            <strong class="decision-title">No result yet</strong>
+            <span class="decision-subtitle">Run an image through the API to see the DMC output.</span>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">Probability</span>
+              <strong class="metric-value" id="probabilityValue">—</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Binary output</span>
+              <strong class="metric-value" id="binaryValue">—</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Mode</span>
+              <strong class="metric-value" id="modeValue">—</strong>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="content-card">
+              <h3>Location</h3>
+              <p id="locationText">No upload or device location available yet.</p>
+              <a id="mapsLink" href="#" target="_blank" rel="noreferrer" hidden>Open in maps</a>
+            </article>
+
+            <article class="content-card">
+              <h3>Policy notes</h3>
+              <ul id="policyNotes" class="detail-list">
+                <li>No policy notes yet.</li>
+              </ul>
+            </article>
+
+            <article class="content-card">
+              <h3>Scene summary</h3>
+              <div id="sceneSummary" class="summary-grid">
+                <span class="summary-chip">No summary yet.</span>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js"></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
