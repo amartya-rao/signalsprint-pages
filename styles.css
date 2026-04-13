@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --page-bg: #f4f1ea;
-  --panel-bg: rgba(255, 255, 255, 0.78);
-  --panel-border: rgba(20, 28, 22, 0.08);
+  --page-bg: #f5f7f6;
+  --panel-bg: rgba(255, 255, 255, 0.92);
+  --panel-border: rgba(20, 28, 22, 0.07);
   --headline: #16221c;
   --body: #425149;
   --muted: #6e7d74;
-  --accent: #0f766e;
-  --accent-soft: rgba(15, 118, 110, 0.12);
+  --accent: #186a61;
+  --accent-soft: rgba(24, 106, 97, 0.09);
   --danger: #b6432d;
-  --shadow: 0 18px 40px rgba(31, 41, 36, 0.08);
+  --shadow: 0 12px 28px rgba(31, 41, 36, 0.06);
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
@@ -22,10 +22,7 @@
 body {
   margin: 0;
   font-family: "Manrope", sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(15, 118, 110, 0.11), transparent 28%),
-    radial-gradient(circle at top right, rgba(182, 67, 45, 0.08), transparent 24%),
-    linear-gradient(180deg, #f9f5ec 0%, var(--page-bg) 100%);
+  background: linear-gradient(180deg, #fafcfc 0%, var(--page-bg) 100%);
   color: var(--headline);
 }
 
@@ -58,7 +55,7 @@ input {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(10px);
 }
 
 .hero-copy,
