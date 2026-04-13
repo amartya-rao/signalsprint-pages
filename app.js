@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://api.signalsprint.tech";
+const API_BASE_URL = "https://amartya06-signalsprint-api.hf.space";
 
 const state = {
   activeTab: "upload",
