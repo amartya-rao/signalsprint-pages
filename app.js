@@ -11,7 +11,6 @@ const state = {
 };
 
 const refs = {
-  apiBaseLabel: document.getElementById("apiBaseLabel"),
   apiHealth: document.getElementById("apiHealth"),
   browserLocationStatus: document.getElementById("browserLocationStatus"),
   uploadTab: document.getElementById("uploadTab"),
@@ -38,8 +37,6 @@ const refs = {
   locationText: document.getElementById("locationText"),
   mapsLink: document.getElementById("mapsLink"),
 };
-
-refs.apiBaseLabel.textContent = API_BASE_URL;
 
 function setStatus(message, isError = false) {
   refs.submissionStatus.textContent = message;
